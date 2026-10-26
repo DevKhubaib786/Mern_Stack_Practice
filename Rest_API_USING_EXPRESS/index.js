@@ -1,9 +1,13 @@
-
 import express from "express";
 
-// Controller se handler import karo
-import { RegisterHandler } from "./Controller/controller.js";
-import {ConnectDB} from "./config/connectDB.js";
+// Controller se handlers import karo
+import {
+  RegisterHandler,
+  LoginHandler,
+  ForgetpassHandler,
+  ResetPasswordHandler,
+} from "./Controller/controller.js";
+import { ConnectDB } from "./config/connectDB.js";
 
 const app = express();
 
@@ -12,15 +16,22 @@ app.use(express.json());
 
 ConnectDB();
 
-// GET route
+// GET test route
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Hello from Server"
+    message: "Hello from Server",
   });
 });
 
-// POST route
+// User routes
 app.post("/user/register", RegisterHandler);
+app.post("/user/login", LoginHandler);
+
+// 1. Forgot password request (email send karne ke liye)
+app.post("/forget/forgetpass", ForgetpassHandler);
+
+// 2. Reset password request (naya password set karne ke liye)
+app.post("/user/reset-password", ResetPasswordHandler);
 
 // Server start karo
 app.listen(4000, () => {
